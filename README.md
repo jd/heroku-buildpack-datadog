@@ -78,7 +78,7 @@ In addition to the environment variables shown above, there are a number of othe
 | `DD_SITE`                  | *Optional.* If you use the app.datadoghq.eu service, set this to `datadoghq.eu`. Defaults to `datadoghq.com`.                                                                                                                                                                                                                                                   |
 | `DD_AGENT_VERSION`         | *Optional.* By default, the buildpack installs the latest version of the Datadog Agent available in the package repository. Use this variable to install older versions of the Datadog Agent (note that not all versions of the Agent may be available). Changing this option requires recompiling the slug. Check [the upgrading and slug recompilation section](#upgrading-and-slug-recompilation) for details.                                                     |
 | `DD_DISABLE_HOST_METRICS`  | *Optional.* By default, the buildpack reports system metrics for the host machine running the dyno. Set this to `true` to disable system metrics collection. See the [system metrics section](#system-metrics) below for more information.                                                                                                                      |
-| `DD_PYTHON_VERSION`        | *Optional.* Starting with version `6.14.0`, Datadog Agent ships with Python versions `2` and `3`. The buildpack will only keep one of the versions. Set this to `2` or `3` to select the Python version you want the agent to keep. If not set, the buildpack will keep `2`. Changing this option requires recompiling the slug. Check [the upgrading and slug recompilation section](#upgrading-and-slug-recompilation) for details. |
+| `DD_PYTHON_VERSION`        | *Optional.* Starting with version `6.14.0`, Datadog Agent ships with Python versions `2` and `3`. The buildpack will only keep one of the versions. Set this to `2` or `3` to select the Python version you want the agent to keep. If not set, the buildpack will keep `2`. Check the [Python versions section](#python-and-agent-versions) below for more information. Changing this option requires recompiling the slug. Check [the upgrading and slug recompilation section](#upgrading-and-slug-recompilation) for details. |
 
 For additional documentation, refer to the [Datadog Agent documentation][9].
 
@@ -174,6 +174,12 @@ For example, to display the status of your Datadog Agent and enabled integration
 ```
 agent-wrapper status
 ```
+
+## Python and Agent versions
+
+Prior to version `6.14` the Datadog v6 agent shipped with Python2 embedded. Starting with `6.14`, and in preparation for Python2 End Of Life, announced for January 2020, the Datadog v6 agent ships with both Python2 and Python3, to give customers enough time to migrate their custom checks to Python3. The Heroku buildpack will only keep one of the versions. Set `DD_PYTHON_VERSION` to `2` or `3` to select the Python version you want the agent to keep. If not set, the buildpack will keep Python2. If you are using custom checks that only work with Python2, we recommend to migrate them to Python3 before its EOL.
+
+Agent v7 only ships with Python3. If you are not using custom checks or your custom checks are already migrated to Python3, we recommend moving to Agent 7 as soon as possible. Starting with `6.15`, v7 releases with the same minor version share the same feature set, making it safe to move between those two. For example, if you are running `6.16` and you don't need Python2, it is safe to jump to `7.16`.
 
 ## Heroku log collection
 
